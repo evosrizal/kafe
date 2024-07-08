@@ -11,11 +11,11 @@ class ItemMenu(models.Model):
 
 class Pesanan(models.Model):
     nomor_meja = models.IntegerField()
-    item = models.ManyToManyField(ItemMenu, through='ItemPesanan')
+    items = models.ManyToManyField(ItemMenu, through='ItemPesanan')
     status = models.CharField(max_length=20, default='pending')
 
     def total_harga(self):
-        return sum(item.harga for item in self.item.all())
+        return sum(itempesanan.subtotal() for itempesanan in self.itempesanan_set.all())
 
     def __str__(self):
         return f"Pesanan {self.id} - Meja {self.nomor_meja}"
